@@ -6,10 +6,11 @@ Setup:
 ```
 mkvirtualenv cbp
 pip install -r requirements.txt
+./getdata.sh
 ```
 
 Run:
 
 ```
-python prove.py
+./prove.py
 ```
