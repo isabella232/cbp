@@ -32,3 +32,7 @@ wget ftp://ftp.census.gov/econ2012/CBP_CSV/cbp12us.zip
 wget ftp://ftp.census.gov/econ2013/CBP_CSV/cbp13us.zip
 
 unzip '*.zip'
+
+wget http://www.census.gov/eos/www/naics/concordances/2002_NAICS_to_1987_SIC.xls
+
+in2csv 2002_NAICS_to_1987_SIC.xls > 2002_NAICS_to_1987_SIC.csv
