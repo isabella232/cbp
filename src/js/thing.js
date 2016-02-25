@@ -4,6 +4,7 @@ var features = require('./detectFeatures')();
 var d3 = require('d3');
 var request = require('d3-request');
 var _ = require('lodash');
+var chosen = require('./libs/chosen.jquery.min.js')
 
 var FIRST_YEAR = 1986;
 var LAST_YEAR = 2013;
@@ -15,6 +16,7 @@ var fmtYearAbbrev = d3.time.format('%y');
 var fmtYearFull = d3.time.format('%Y');
 
 var employeeData = {};
+var currentNaics = '541512';
 var isMobile = false;
 
 function init () {
@@ -22,7 +24,33 @@ function init () {
 		employeeData = data;
 
 		update();
+
+        var opt = $('<option>', { value: '541512' }).text('Computer Systems Design Services');
+        $('#picker').append(opt);
+
+        var opt = $('<option>', { value: '713110' }).text('Amusement and Theme Parks');
+        $('#picker').append(opt);
+
+        $('#picker').chosen({ width: '300px' }).change(onPickerChange);
+
+        $('#examples a').on('click', onExampleClick);
 	});
+}
+
+function onPickerChange(e) {
+    e.preventDefault();
+
+    currentNaics = $(this).val();
+
+    update();
+}
+
+function onExampleClick(e) {
+    e.preventDefault();
+
+    currentNaics = $(this).data('naics');
+
+    update();
 }
 
 function update () {
@@ -34,11 +62,14 @@ function update () {
 		isMobile = false;
 	}
 
+    $('#chart-title .naics').text(currentNaics);
+    $('#chart-title .description').text('TKTK');
+
 	// Render the chart!
 	renderColumnChart({
 		container: '#chart',
 		width: width,
-		data: employeeData['541512']
+		data: employeeData[currentNaics]
 	});
 
 	// adjust iframe for dynamic content
