@@ -10,7 +10,7 @@ dist
 build
 .proof
 .ipynb_checkpoints
-data
+/data
 node_modules/
 .tmp
 *.csv

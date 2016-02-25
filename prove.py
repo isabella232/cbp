@@ -24,8 +24,6 @@ def get_sic_crosswalk():
             except ValueError:
                 continue
 
-            print(sic, naics)
-
             if sic in ignore_sic:
                 continue
             elif naics in ignore_naics:

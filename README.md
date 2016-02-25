@@ -12,5 +12,6 @@ pip install -r requirements.txt
 Run:
 
 ```
-./prove.py
+python prove.py
+python transform.py
 ```

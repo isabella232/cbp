@@ -22,8 +22,7 @@ def denormalize(table, value_column, lookup):
     column_names.pop()
     column_names.insert(1, 'description')
 
-    table = table.select(column_names)
-    table.to_csv('%s.csv' % value_column)
+    return table.select(column_names)
 
 def main():
     text = agate.Text()
@@ -41,10 +40,12 @@ def main():
     lookup = get_naics_descriptions()
 
     print('Denormalizing employees')
-    denormalize(table, 'emp', lookup)
+    employees = denormalize(table, 'emp', lookup)
+    employees.to_json('src/data/employees.json', key='naics')
 
     print('Denormalizing establishments')
-    denormalize(table, 'est', lookup)
+    establishments = denormalize(table, 'est', lookup)
+    establishments.to_json('src/data/establishments.json', key='naics')
 
 
 if __name__ == '__main__':
