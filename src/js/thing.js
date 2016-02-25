@@ -15,26 +15,37 @@ var fmtComma = d3.format(',');
 var fmtYearAbbrev = d3.time.format('%y');
 var fmtYearFull = d3.time.format('%Y');
 
+var $picker = null;
+
 var employeeData = {};
 var currentNaics = '541512';
 var isMobile = false;
 
 function init () {
+    $picker = $('#picker');
+
 	request.json('./data/employees.json', function(err, data) {
 		employeeData = data;
 
 		update();
 
-        var opt = $('<option>', { value: '541512' }).text('Computer Systems Design Services');
-        $('#picker').append(opt);
+        populatePicker();
 
-        var opt = $('<option>', { value: '713110' }).text('Amusement and Theme Parks');
-        $('#picker').append(opt);
-
-        $('#picker').chosen({ width: '300px' }).change(onPickerChange);
+        $picker
+            .chosen({ width: '300px' })
+            .change(onPickerChange)
+            .val(currentNaics)
+            .trigger("chosen:updated");;
 
         $('#examples a').on('click', onExampleClick);
 	});
+}
+
+function populatePicker() {
+    _.each(employeeData, function(data, naics) {
+        var opt = $('<option>', { value: naics }).text(data['description']);
+        $picker.append(opt);
+    })
 }
 
 function onPickerChange(e) {
@@ -87,7 +98,7 @@ var renderColumnChart = function(config) {
 	/*
 	 * Setup chart container.
 	 */
-    var aspectRatio = 5/3;
+    var aspectRatio = 7/3;
 
 	var margins = {
 		top: 10,
@@ -138,9 +149,11 @@ var renderColumnChart = function(config) {
 		.rangeRoundBands([0, chartWidth], .1)
 		.domain(domain);
 
+    var maxValue = _.max(formattedData);
+
 	var yScale = d3.scale.linear()
 		.range([chartHeight, 0])
-		.domain([0, 1000000]);
+		.domain([0, maxValue]);
 
 	/*
 	 * Create D3 axes.
@@ -163,7 +176,6 @@ var renderColumnChart = function(config) {
 	var yAxis = d3.svg.axis()
 		.scale(yScale)
 		.orient('left')
-		.tickValues(config['yTicks'])
 		.tickFormat(function(d, i) {
 			var label = fmtComma(d);
 

@@ -37,14 +37,17 @@ def main():
 
     print('Loading')
     table = agate.Table.from_csv('merged.csv', columns.keys(), columns.values())
+    table = table.where(lambda r: r['naics'] is not None and len(r['naics']) == 6)
     lookup = get_naics_descriptions()
 
     print('Denormalizing employees')
     employees = denormalize(table, 'emp', lookup)
+    employees = employees.where(lambda r: r['2013'] is not None)
     employees.to_json('src/data/employees.json', key='naics')
 
     print('Denormalizing establishments')
     establishments = denormalize(table, 'est', lookup)
+    establishments = establishments.where(lambda r: r['2013'] is not None)
     establishments.to_json('src/data/establishments.json', key='naics')
 
 
