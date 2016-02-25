@@ -11,3 +11,6 @@ build
 .proof
 .ipynb_checkpoints
 data
+node_modules/
+.tmp
+*.csv
