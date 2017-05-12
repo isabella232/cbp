@@ -18,13 +18,13 @@ var fmtYearFull = d3.time.format('%Y');
 var $picker = null;
 
 var employeeData = {};
-var currentNaics = '541512';
+var currentNaics = '311111';
 var isMobile = false;
 
 function init () {
     $picker = $('#picker');
 
-	request.json('./data/employees.json', function(err, data) {
+	request.json('./data/means.json', function(err, data) {
 		employeeData = data;
 
 		update();
@@ -60,6 +60,7 @@ function onExampleClick(e) {
     e.preventDefault();
 
     currentNaics = $(this).data('naics');
+    $picker.val(currentNaics).trigger("chosen:updated");;
 
     update();
 }
@@ -74,7 +75,7 @@ function update () {
 	}
 
     $('#chart-title .naics').text(currentNaics);
-    $('#chart-title .description').text('TKTK');
+    $('#chart-title .description').text(employeeData[currentNaics]['description']);
 
 	// Render the chart!
 	renderColumnChart({

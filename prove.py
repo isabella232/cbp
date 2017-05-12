@@ -25,8 +25,14 @@ def get_sic_crosswalk():
                 continue
 
             if sic in ignore_sic:
+                walk.inv.pop(naics, None)
+                ignore_naics.append(naics)
+
                 continue
             elif naics in ignore_naics:
+                walk.pop(sic, None)
+                ignore_sic.append(sic)
+
                 continue
             elif sic in walk or naics in walk.inv:
                 walk.pop(sic, None)
@@ -37,6 +43,7 @@ def get_sic_crosswalk():
 
                 continue
             else:
+                print('d')
                 walk[sic] = naics
 
     return walk
